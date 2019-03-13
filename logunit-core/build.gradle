@@ -1,0 +1,10 @@
+
+description = 'The core of the LogUnit framework, containing API and non-logframework-specific code.'
+
+apply from: new File(rootProject.projectDir, 'publishing-build.gradle')
+
+dependencies {
+    api("org.slf4j:slf4j-api:${slf4jVersion}")
+
+    implementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+}

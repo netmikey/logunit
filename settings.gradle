@@ -1,0 +1,3 @@
+
+include 'logunit-core',
+        'logunit-logback'

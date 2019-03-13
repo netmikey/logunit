@@ -1,0 +1,13 @@
+
+description = "LogUnit's Logback implementation."
+
+apply from: new File(rootProject.projectDir, 'publishing-build.gradle')
+
+dependencies {
+    api project(':logunit-core')
+
+    implementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+    implementation("ch.qos.logback:logback-classic:${logbackVersion}")
+
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+}

@@ -1,0 +1,21 @@
+
+allprojects {
+    group = "io.github.netmikey.logunit"
+    version = "1.0.0-SNAPSHOT"
+}
+
+subprojects {
+
+    apply plugin: 'java-library'
+
+    ext {
+        junitVersion   = '5.4.0'
+        slf4jVersion   = '1.7.26'
+        logbackVersion = '1.2.3'
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+}
