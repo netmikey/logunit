@@ -83,7 +83,7 @@ By default, only the log levels `INFO` and above are being captured. You can cap
         .captureForLogger("LOGGER_NAME", Level.DEBUG);
 ```
 
-See `io.github.netmikey.logunit.logback.LogCapturerWithLogbackTest` for more in-depth examples.
+See [LogCapturerWithLogbackTest.java](https://github.com/netmikey/logunit/blob/master/logunit-logback/src/test/java/io/github/netmikey/logunit/logback/LogCapturerWithLogbackTest.java) for more in-depth examples.
 
 
 ## Architecture
