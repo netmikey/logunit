@@ -29,8 +29,8 @@ Add LogUnit to your project's dependencies.
 ```
 dependencies {
     ...
-    testImplementation("io.github.netmikey.logunit:logunit-core:1.0.0")
-    testRuntimeOnly("io.github.netmikey.logunit:logunit-logback:1.0.0")
+    testImplementation("io.github.netmikey.logunit:logunit-core:1.0.1")
+    testRuntimeOnly("io.github.netmikey.logunit:logunit-logback:1.0.1")
 }
 ```
 
