@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.slf4j.LoggerFactory;
@@ -16,7 +17,6 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.IThrowableProxy;
 import ch.qos.logback.classic.spi.ThrowableProxy;
-import ch.qos.logback.core.read.ListAppender;
 import io.github.netmikey.logunit.api.LogCapturer;
 import io.github.netmikey.logunit.api.LogProvider;
 
@@ -47,7 +47,7 @@ public class LogbackLogProvider implements LogProvider {
         LEVEL_MAPPING_REVERSE = Collections.unmodifiableMap(levelMappingReverse);
     }
 
-    private final ListAppender<ILoggingEvent> listAppender = new ListAppender<ILoggingEvent>();
+    private final ConcurrentListAppender<ILoggingEvent> listAppender = new ConcurrentListAppender<ILoggingEvent>();
 
     private final Map<Class<?>, Level> loggerTypes = new HashMap<>();
 
@@ -75,7 +75,9 @@ public class LogbackLogProvider implements LogProvider {
 
     @Override
     public List<LoggingEvent> getEvents() {
-        return listAppender.list.stream().map(this::mapEvent).collect(Collectors.toList());
+        return StreamSupport.stream(listAppender.spliterator(), false)
+            .map(this::mapEvent)
+            .collect(Collectors.toList());
     }
 
     @Override
