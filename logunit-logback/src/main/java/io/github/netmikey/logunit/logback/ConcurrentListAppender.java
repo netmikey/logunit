@@ -11,9 +11,9 @@ import ch.qos.logback.core.read.ListAppender;
  * Unfortunately, Logback's {@link ListAppender} isn't thread safe. This is a
  * thread-safe variant based on it. Technically speaking, it doesn't use a
  * {@link List} but a {@link ConcurrentLinkedQueue} and exposes items using a
- * {@link Splierator}.
+ * {@link Spliterator}.
  * 
- * @See ListAppender
+ * @see ListAppender
  * 
  * @param <E>
  *            The list element type.
