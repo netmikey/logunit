@@ -1,14 +1,16 @@
 LogUnit
 =======
 
-A framework for unit-testing logging.
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.netmikey.logunit/logunit-core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.netmikey.logunit/logunit-core)
+
+A Java library for unit-testing logging.
 
 
 ## Purpose
 
 Sometimes, writing specific information into its log(file) is an important part of an application's functionality. As such, it's probably a good idea to cover that behavior in the application's unit tests.
 
-Although there are other solutions to achieve this (like e.g. encapsulate important logging into dedicated Java interfaces, inject mocks of those interfaces into the unit and test for the methods to be called), LogUnit aims at testing on a  lower level, right within the logging framework. No matter how you generate your log messages in your project, if they end up in the popular [Slf4j](https://www.slf4j.org) library, you can use LogUnit (\*).
+Although there are other solutions to achieve this (like e.g. using mocks and test for the methods to be called), LogUnit aims at testing on another level: right within the logging framework, so you can still see all your logs while testing. No matter how you generate your log messages in your project, if they end up in the popular [Slf4j](https://www.slf4j.org) library, you can use LogUnit (\*).
 
 
 ## Requirements
