@@ -1,6 +1,5 @@
 package io.github.netmikey.logunit.logback;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,60 +17,16 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.IThrowableProxy;
 import ch.qos.logback.classic.spi.ThrowableProxy;
 import io.github.netmikey.logunit.api.LogCapturer;
-import io.github.netmikey.logunit.api.LogProvider;
+import io.github.netmikey.logunit.core.BaseLogProvider;
 
 /**
  * {@link LogCapturer} implementation based on Logback.
  */
-public class LogbackLogProvider implements LogProvider {
-
-    private static final Map<org.slf4j.event.Level, ch.qos.logback.classic.Level> LEVEL_MAPPING;
-
-    private static final Map<ch.qos.logback.classic.Level, org.slf4j.event.Level> LEVEL_MAPPING_REVERSE;
-
-    static {
-        Map<org.slf4j.event.Level, ch.qos.logback.classic.Level> levelMapping = new HashMap<>();
-        levelMapping.put(org.slf4j.event.Level.TRACE, ch.qos.logback.classic.Level.TRACE);
-        levelMapping.put(org.slf4j.event.Level.DEBUG, ch.qos.logback.classic.Level.DEBUG);
-        levelMapping.put(org.slf4j.event.Level.INFO, ch.qos.logback.classic.Level.INFO);
-        levelMapping.put(org.slf4j.event.Level.WARN, ch.qos.logback.classic.Level.WARN);
-        levelMapping.put(org.slf4j.event.Level.ERROR, ch.qos.logback.classic.Level.ERROR);
-
-        LEVEL_MAPPING = Collections.unmodifiableMap(levelMapping);
-
-        Map<ch.qos.logback.classic.Level, org.slf4j.event.Level> levelMappingReverse = new HashMap<>();
-        levelMapping.forEach((key, value) -> levelMappingReverse.put(value, key));
-        levelMappingReverse.put(ch.qos.logback.classic.Level.ALL, org.slf4j.event.Level.TRACE);
-        levelMappingReverse.put(ch.qos.logback.classic.Level.OFF, org.slf4j.event.Level.ERROR);
-
-        LEVEL_MAPPING_REVERSE = Collections.unmodifiableMap(levelMappingReverse);
-    }
+public class LogbackLogProvider extends BaseLogProvider {
 
     private final ConcurrentListAppender<ILoggingEvent> listAppender = new ConcurrentListAppender<ILoggingEvent>();
 
-    private final Map<Class<?>, Level> loggerTypes = new HashMap<>();
-
-    private final Map<String, Level> loggerNames = new HashMap<>();
-
     private final Map<String, Level> originalLevels = new HashMap<>();
-
-    @Override
-    public void provideForType(Class<?> type, org.slf4j.event.Level level) {
-        if (loggerTypes.containsKey(type)) {
-            throw new IllegalArgumentException("LogProvider already providing LogEvents for Logger of type "
-                + type.getName() + ". Each logger must only be captured once!");
-        }
-        loggerTypes.put(type, mapLevel(level));
-    }
-
-    @Override
-    public void provideForLogger(String name, org.slf4j.event.Level level) {
-        if (loggerNames.containsKey(name)) {
-            throw new IllegalArgumentException("LogProvider already providing LogEvents for Logger with name "
-                + name + ". Each logger must only be captured once!");
-        }
-        loggerNames.put(name, mapLevel(level));
-    }
 
     @Override
     public List<LoggingEvent> getEvents() {
@@ -93,19 +48,19 @@ public class LogbackLogProvider implements LogProvider {
     }
 
     private void addAppenderToLoggingSources() {
-        for (Map.Entry<Class<?>, Level> logSource : loggerTypes.entrySet()) {
-            addAppenderToType(logSource.getKey(), logSource.getValue());
+        for (Map.Entry<Class<?>, org.slf4j.event.Level> logSource : getLoggerTypes().entrySet()) {
+            addAppenderToType(logSource.getKey(), LevelMapper.mapLevel(logSource.getValue()));
         }
-        for (Map.Entry<String, Level> logSource : loggerNames.entrySet()) {
-            addAppenderToLogger(logSource.getKey(), logSource.getValue());
+        for (Map.Entry<String, org.slf4j.event.Level> logSource : getLoggerNames().entrySet()) {
+            addAppenderToLogger(logSource.getKey(), LevelMapper.mapLevel(logSource.getValue()));
         }
     }
 
     private void detachAppenderFromLoggingSources() {
-        for (Map.Entry<Class<?>, Level> logSource : loggerTypes.entrySet()) {
+        for (Map.Entry<Class<?>, org.slf4j.event.Level> logSource : getLoggerTypes().entrySet()) {
             detachAppenderFromType(logSource.getKey());
         }
-        for (Map.Entry<String, Level> logSource : loggerNames.entrySet()) {
+        for (Map.Entry<String, org.slf4j.event.Level> logSource : getLoggerNames().entrySet()) {
             detachAppenderFromLogger(logSource.getKey());
         }
     }
@@ -183,7 +138,7 @@ public class LogbackLogProvider implements LogProvider {
 
             @Override
             public org.slf4j.event.Level getLevel() {
-                return mapLevel(iEvent.getLevel());
+                return LevelMapper.mapLevel(iEvent.getLevel());
             }
 
             @Override
@@ -191,21 +146,5 @@ public class LogbackLogProvider implements LogProvider {
                 return iEvent.getArgumentArray();
             }
         };
-    }
-
-    private Level mapLevel(org.slf4j.event.Level level) {
-        Level result = LEVEL_MAPPING.get(level);
-        if (result == null) {
-            throw new IllegalArgumentException("Cannot map log level " + level + " to a Logback log level");
-        }
-        return result;
-    }
-
-    private org.slf4j.event.Level mapLevel(Level level) {
-        org.slf4j.event.Level result = LEVEL_MAPPING_REVERSE.get(level);
-        if (result == null) {
-            throw new IllegalArgumentException("Cannot map Logback log level " + level + " to an slf4j log level");
-        }
-        return result;
     }
 }

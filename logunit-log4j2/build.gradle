@@ -1,0 +1,14 @@
+
+description = "LogUnit's Log4j2 implementation."
+
+apply from: new File(rootProject.projectDir, 'publishing-build.gradle')
+
+dependencies {
+    api project(':logunit-core')
+
+    implementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+    implementation("org.apache.logging.log4j:log4j-core:${log4j2Version}")
+
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+    testRuntimeOnly("org.apache.logging.log4j:log4j-slf4j-impl:${log4j2Version}")
+}

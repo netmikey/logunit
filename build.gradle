@@ -10,8 +10,9 @@ subprojects {
 
     ext {
         junitVersion   = '5.4.0'
-        slf4jVersion   = '1.7.26'
         logbackVersion = '1.2.3'
+        log4j2Version  = '2.11.2'
+        slf4jVersion   = '1.7.26'
     }
 
     repositories {

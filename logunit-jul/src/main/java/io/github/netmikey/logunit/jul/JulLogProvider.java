@@ -1,6 +1,5 @@
 package io.github.netmikey.logunit.jul;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,53 +14,20 @@ import org.slf4j.Marker;
 import org.slf4j.event.LoggingEvent;
 
 import io.github.netmikey.logunit.api.LogCapturer;
-import io.github.netmikey.logunit.api.LogProvider;
+import io.github.netmikey.logunit.core.BaseLogProvider;
 
 /**
  * {@link LogCapturer} implementation based on JUL.
  */
-public class JulLogProvider implements LogProvider {
-
-    private static final Map<org.slf4j.event.Level, java.util.logging.Level> LEVEL_MAPPING;
-
-    private static final Map<java.util.logging.Level, org.slf4j.event.Level> LEVEL_MAPPING_REVERSE;
-
-    static {
-        Map<org.slf4j.event.Level, java.util.logging.Level> levelMapping = new HashMap<>();
-        levelMapping.put(org.slf4j.event.Level.TRACE, java.util.logging.Level.FINEST);
-        levelMapping.put(org.slf4j.event.Level.DEBUG, java.util.logging.Level.FINE);
-        levelMapping.put(org.slf4j.event.Level.INFO, java.util.logging.Level.INFO);
-        levelMapping.put(org.slf4j.event.Level.WARN, java.util.logging.Level.WARNING);
-        levelMapping.put(org.slf4j.event.Level.ERROR, java.util.logging.Level.SEVERE);
-
-        LEVEL_MAPPING = Collections.unmodifiableMap(levelMapping);
-
-        Map<java.util.logging.Level, org.slf4j.event.Level> levelMappingReverse = new HashMap<>();
-        levelMapping.forEach((key, value) -> levelMappingReverse.put(value, key));
-        levelMappingReverse.put(java.util.logging.Level.CONFIG, org.slf4j.event.Level.INFO);
-        levelMappingReverse.put(java.util.logging.Level.FINER, org.slf4j.event.Level.DEBUG);
-
-        LEVEL_MAPPING_REVERSE = Collections.unmodifiableMap(levelMappingReverse);
-    }
+public class JulLogProvider extends BaseLogProvider {
 
     private final ListHandler listHandler = new ListHandler();
-
-    private final Map<String, Level> loggerNames = new HashMap<>();
 
     private final Map<String, Level> originalLevels = new HashMap<>();
 
     @Override
     public void provideForType(Class<?> type, org.slf4j.event.Level level) {
         provideForLogger(type.getName(), level);
-    }
-
-    @Override
-    public void provideForLogger(String name, org.slf4j.event.Level level) {
-        if (loggerNames.containsKey(name)) {
-            throw new IllegalArgumentException("LogProvider already providing LogEvents for Logger with name "
-                + name + ". Each logger must only be captured once!");
-        }
-        loggerNames.put(name, mapLevel(level));
     }
 
     @Override
@@ -84,15 +50,13 @@ public class JulLogProvider implements LogProvider {
     }
 
     private void addAppenderToLoggingSources() {
-        for (Map.Entry<String, Level> logSource : loggerNames.entrySet()) {
-            addAppenderToLogger(logSource.getKey(), logSource.getValue());
-        }
+        getLoggerNames().forEach((loggerName, level) -> {
+            addAppenderToLogger(loggerName, LevelMapper.mapLevel(level));
+        });
     }
 
     private void detachAppenderFromLoggingSources() {
-        for (Map.Entry<String, Level> logSource : loggerNames.entrySet()) {
-            detachAppenderFromLogger(logSource.getKey());
-        }
+        getLoggerNames().keySet().forEach(this::detachAppenderFromLogger);
     }
 
     private void addAppenderToLogger(String name, Level level) {
@@ -152,7 +116,7 @@ public class JulLogProvider implements LogProvider {
 
             @Override
             public org.slf4j.event.Level getLevel() {
-                return mapLevel(record.getLevel());
+                return LevelMapper.mapLevel(record.getLevel());
             }
 
             @Override
@@ -160,21 +124,5 @@ public class JulLogProvider implements LogProvider {
                 return record.getParameters();
             }
         };
-    }
-
-    private Level mapLevel(org.slf4j.event.Level level) {
-        Level result = LEVEL_MAPPING.get(level);
-        if (result == null) {
-            throw new IllegalArgumentException("Cannot map log level " + level + " to a JUL log level");
-        }
-        return result;
-    }
-
-    private org.slf4j.event.Level mapLevel(Level level) {
-        org.slf4j.event.Level result = LEVEL_MAPPING_REVERSE.get(level);
-        if (result == null) {
-            throw new IllegalArgumentException("Cannot map JUL log level " + level + " to an slf4j log level");
-        }
-        return result;
     }
 }

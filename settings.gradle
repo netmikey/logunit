@@ -1,4 +1,5 @@
 
 include 'logunit-core',
         'logunit-logback',
-		'logunit-jul'
+        'logunit-jul',
+        'logunit-log4j2'

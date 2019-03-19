@@ -27,7 +27,7 @@ public class LogCapturer implements BeforeTestExecutionCallback, AfterTestExecut
     private Level defaultLevel = Level.INFO;
 
     private LogCapturer() {
-        // Do not instantiate direcly.
+        // Do not instantiate directly.
     }
 
     /**
