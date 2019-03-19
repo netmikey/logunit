@@ -1,3 +1,4 @@
 
 include 'logunit-core',
-        'logunit-logback'
+        'logunit-logback',
+		'logunit-jul'

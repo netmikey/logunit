@@ -1,0 +1,12 @@
+
+description = "LogUnit's JUL (java.util.logging) implementation."
+
+apply from: new File(rootProject.projectDir, 'publishing-build.gradle')
+
+dependencies {
+    api project(':logunit-core')
+
+    implementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+}
