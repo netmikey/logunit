@@ -1,6 +1,7 @@
 LogUnit
 =======
 
+[![Build Status](https://travis-ci.com/netmikey/logunit.svg?branch=master)](https://travis-ci.com/netmikey/logunit)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.netmikey.logunit/logunit-core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.netmikey.logunit/logunit-core)
 
 A Java library for unit-testing logging.
@@ -10,15 +11,21 @@ A Java library for unit-testing logging.
 
 Sometimes, writing specific information into its log(file) is an important part of an application's functionality. As such, it's probably a good idea to cover that behavior in the application's unit tests.
 
-Although there are other solutions to achieve this (like e.g. using mocks and test for the methods to be called), LogUnit aims at testing on another level: right within the logging framework, so you can still see all your logs while testing. No matter how you generate your log messages in your project, if they end up in the popular [Slf4j](https://www.slf4j.org) library or in java.util.logging, you can use LogUnit (\*).
+Although there are other solutions to achieve this (like e.g. using mocks and test for the methods to be called), LogUnit aims at testing on another level: right within the logging framework, so you can still see all your logs while testing. No matter how you generate your log messages in your project, if they end up in one of the supported logging frameworks, you can use LogUnit.
 
 
 ## Requirements
 
 - Java 8 or above
 - JUnit 5
-- You must be using Slf4j or java.util.logging for logging
-- You must be using Logback or java.util.logging as log binding (\*)
+- You must be using one of the supported logging frameworks at test runtime
+- You may use [Slf4j](https://www.slf4j.org) or your logging framework's native API (or anything else that makes your log events end up in your logging framework at runtime)
+
+### Supported logging frameworks
+
+- java.util.logging (the JDK's logging API)
+- [Logback](https://logback.qos.ch)
+- [Log4j2](https://logging.apache.org/log4j/2.x/)
 
 
 ## Installation
@@ -26,7 +33,7 @@ Although there are other solutions to achieve this (like e.g. using mocks and te
 Add LogUnit to your project's dependencies.
 
 * Declare `logunit-core` as compile-time dependency
-* Declare the binding-specific module (e.g. `logunit-logback` or `logunit-jul` (\*)) as test-runtime dependency
+* Declare the binding-specific module (e.g. `logunit-logback`, `logunit-log4j2` or `logunit-jul`) as test-runtime dependency
 
 ```
 dependencies {
@@ -37,6 +44,9 @@ dependencies {
 
     // for Logback:
     // testRuntimeOnly("io.github.netmikey.logunit:logunit-logback:1.1.0")
+
+    // for Log4j2:
+    // testRuntimeOnly("io.github.netmikey.logunit:logunit-log4j2:1.1.0")
 
     // for JUL:
     // testRuntimeOnly("io.github.netmikey.logunit:logunit-jul:1.1.0")
@@ -97,11 +107,7 @@ See [LogCapturerWithLogbackTest.java](https://github.com/netmikey/logunit/blob/m
 
 ## Architecture
 
-LogUnit wants to remain as transparent as possible. That means your unit tests' logs should stay the way they are (or at least as close as possible). As such, we don't want to bring and force our own Slf4j binding implementation onto consuming projects.
+LogUnit wants to remain as transparent and easy to setup as possible. That means your unit tests' logs should stay the way they are (or at least as close as possible). As such, we don't want to bring and force our own Slf4j binding implementation onto consuming projects.
 
-Therefor, LogUnit's architecture is similar to Slf4j's: At it's core, it uses the Slf4j API but in order to work at runtime, it provides binding-specific modules for hooking into the most popular logging frameworks (\*).
+Therefor, LogUnit's architecture is similar to Slf4j's: At it's core, it uses the Slf4j API but in order to work at runtime, it provides binding-specific modules for hooking into the most popular logging frameworks.
 
-
-## Limitations
-
-(\*) Currently, only Logback and java.util.logging are supported.
