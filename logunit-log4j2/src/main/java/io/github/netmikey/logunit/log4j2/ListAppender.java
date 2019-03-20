@@ -26,12 +26,30 @@ public class ListAppender extends AbstractAppender {
     /**
      * Create a new instance.
      * 
+     * @param name
+     *            The new appender's name within the Log4j2 context.
+     * 
      * @return A new instance.
      */
     public static ListAppender create(String name) {
         return new ListAppender(name, null, PatternLayout.createDefaultLayout(), true, Property.EMPTY_ARRAY);
     }
 
+    /**
+     * Overridden constructor from log4j2 superclass.
+     * 
+     * @param name
+     *            The Appender name.
+     * @param filter
+     *            The Filter to associate with the Appender.
+     * @param layout
+     *            The layout to use to format the event.
+     * @param ignoreExceptions
+     *            If true, exceptions will be logged and suppressed. If false
+     *            errors will be logged and then passed to the application.
+     * @param properties
+     *            The filter properties.
+     */
     protected ListAppender(String name, Filter filter, Layout<? extends Serializable> layout, boolean ignoreExceptions,
         Property[] properties) {
         super(name, filter, layout, ignoreExceptions, properties);

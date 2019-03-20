@@ -26,6 +26,9 @@ public class Log4j2LogProvider extends BaseLogProvider {
 
     private final ListAppender listAppender;
 
+    /**
+     * Default constructor.
+     */
     public Log4j2LogProvider() {
         super();
         listAppender = ListAppender.create("LogUnitListAppender" + RAND.nextInt());
