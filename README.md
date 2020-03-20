@@ -28,6 +28,11 @@ Although there are other solutions to achieve this (like e.g. using mocks and te
 - [Log4j2](https://logging.apache.org/log4j/2.x/)
 
 
+## Limitations
+
+Because of the very nature of how logging frameworks work, LogUnit cannot be used with parallel test execution. See [this issue](https://github.com/netmikey/logunit/issues/1) for a more detailed explanation.
+
+
 ## Installation
 
 Add LogUnit to your project's dependencies.
