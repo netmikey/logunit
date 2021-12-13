@@ -9,10 +9,10 @@ subprojects {
     apply plugin: 'java-library'
 
     ext {
-        junitVersion   = '5.4.0'
-        logbackVersion = '1.2.3'
-        log4j2Version  = '2.11.2'
-        slf4jVersion   = '1.7.26'
+        junitVersion   = '5.8.2'  // https://search.maven.org/artifact/org.junit.jupiter/junit-jupiter-api
+        logbackVersion = '1.2.7'  // https://search.maven.org/artifact/ch.qos.logback/logback-core
+        log4j2Version  = '2.15.0' // https://search.maven.org/artifact/org.apache.logging.log4j/log4j-core
+        slf4jVersion   = '1.7.32' // https://search.maven.org/artifact/org.slf4j/slf4j-api
     }
 
     repositories {
