@@ -8,6 +8,8 @@ subprojects {
 
     apply plugin: 'java-library'
 
+    java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+
     ext {
         junitVersion   = '5.8.2'  // https://search.maven.org/artifact/org.junit.jupiter/junit-jupiter-api
         logbackVersion = '1.2.7'  // https://search.maven.org/artifact/ch.qos.logback/logback-core
