@@ -3,7 +3,7 @@ package io.github.netmikey.logunit.log4j2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.MethodOrderer.Alphanumeric;
+import org.junit.jupiter.api.MethodOrderer.MethodName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -15,7 +15,7 @@ import io.github.netmikey.logunit.api.LogCapturer;
  * Unit test that uses the log4j2 API directly, applies {@link LogCapturer}s and
  * validates their behavior.
  */
-@TestMethodOrder(Alphanumeric.class)
+@TestMethodOrder(MethodName.class)
 public class LogCapturerWithLog4j2Test {
 
     @RegisterExtension
