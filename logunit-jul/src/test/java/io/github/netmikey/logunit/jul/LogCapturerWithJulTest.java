@@ -86,8 +86,8 @@ public class LogCapturerWithJulTest {
         logger.severe("Some severe message");
     }
 
-    // The logger will not be until the object is. This tests that log messages will be captured without allowing
-    // the intercepted Logger to be garbage collected.
+    // The logger will not be constructed until the object is. This tests that log messages will be captured
+    // without allowing the intercepted Logger to be garbage collected.
     private static class LoggingObject {
         Logger testLogger = Logger.getLogger(LoggingObject.class.getName());
     }
