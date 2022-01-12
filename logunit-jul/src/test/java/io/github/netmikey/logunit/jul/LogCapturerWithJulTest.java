@@ -19,14 +19,12 @@ import io.github.netmikey.logunit.api.LogCapturer;
 public class LogCapturerWithJulTest {
 
     @RegisterExtension
-    LogCapturer testLoggerInfoCapturer = LogCapturer.create().captureForType(LogCapturerWithJulTest.class);
+    LogCapturer testLoggerInfoCapturer = LogCapturer.create().captureForType(LoggingObject.class);
 
     @RegisterExtension
     LogCapturer namedLoggerWarnCapturer = LogCapturer.create().captureForLogger(LOGGER_NAME, Level.WARN);
 
     private static final String LOGGER_NAME = "CUSTOM_LOGGER";
-
-    private Logger testLogger = Logger.getLogger(LogCapturerWithJulTest.class.getName());
 
     private Logger namedLogger = Logger.getLogger(LOGGER_NAME);
 
@@ -38,11 +36,15 @@ public class LogCapturerWithJulTest {
      * <li>that the namedLogger (by logger name) captures only the WARN level
      * and above as specified</li>
      * <li>both loggers and their capturers don't affeact each other</li>
+     * <li>logger is not garbage collected, losing interception</li>
      * </ul>
      */
     @Test
-    public void test1CaptureMessages() {
-        logEverythingOnce(testLogger);
+    public void test1CaptureMessages() throws InterruptedException {
+        System.gc();
+        Thread.sleep(50);
+
+        logEverythingOnce(new LoggingObject().testLogger);
         logEverythingOnce(namedLogger);
 
         Assertions.assertEquals(3, testLoggerInfoCapturer.size(),
@@ -82,5 +84,11 @@ public class LogCapturerWithJulTest {
         logger.info("Some info message");
         logger.warning("Some warning message");
         logger.severe("Some severe message");
+    }
+
+    // The logger will not be constructed until the object is. This tests that log messages will be captured
+    // without allowing the intercepted Logger to be garbage collected.
+    private static class LoggingObject {
+        Logger testLogger = Logger.getLogger(LoggingObject.class.getName());
     }
 }
