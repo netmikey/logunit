@@ -35,12 +35,15 @@ public class LogCapturerWithJulTest {
      * above when no level is specified</li>
      * <li>that the namedLogger (by logger name) captures only the WARN level
      * and above as specified</li>
-     * <li>both loggers and their capturers don't affeact each other</li>
+     * <li>both loggers and their capturers don't affect each other</li>
      * <li>logger is not garbage collected, losing interception</li>
      * </ul>
+     * 
+     * @throws Exception
+     *             Unexpected failure.
      */
     @Test
-    public void test1CaptureMessages() throws InterruptedException {
+    public void test1CaptureMessages() throws Exception {
         System.gc();
         Thread.sleep(50);
 
@@ -86,8 +89,11 @@ public class LogCapturerWithJulTest {
         logger.severe("Some severe message");
     }
 
-    // The logger will not be constructed until the object is. This tests that log messages will be captured
-    // without allowing the intercepted Logger to be garbage collected.
+    /**
+     * The logger will not be constructed until the object is. This tests that
+     * log messages will be captured without allowing the intercepted Logger to
+     * be garbage collected.
+     */
     private static class LoggingObject {
         Logger testLogger = Logger.getLogger(LoggingObject.class.getName());
     }
