@@ -23,6 +23,10 @@ public class JulLogProvider extends BaseLogProvider {
 
     private final ListHandler listHandler = new ListHandler();
 
+    // We hold references to loggers we have intercepted to avoid them being garbage collected and reconstructed without
+    // our handler in between beforeTestExecution and the actual test business logic.
+    private final Map<String, Logger> loggers = new HashMap<>();
+
     private final Map<String, Level> originalLevels = new HashMap<>();
 
     @Override
@@ -65,6 +69,7 @@ public class JulLogProvider extends BaseLogProvider {
 
     private void addAppenderToLogger(Logger logger, Level level) {
         logger.addHandler(listHandler);
+        loggers.put(logger.getName(), logger);
         originalLevels.put(logger.getName(), logger.getLevel());
         logger.setLevel(level);
     }
@@ -75,6 +80,7 @@ public class JulLogProvider extends BaseLogProvider {
 
     private void detachAppenderFromLogger(Logger logger) {
         logger.removeHandler(listHandler);
+        loggers.remove(logger.getName());
         Level originalLevel = originalLevels.get(logger.getName());
         if (originalLevel != null) {
             logger.setLevel(originalLevel);
