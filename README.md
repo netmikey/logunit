@@ -1,7 +1,7 @@
 LogUnit
 =======
 
-[![Build Status](https://travis-ci.com/netmikey/logunit.svg?branch=master)](https://travis-ci.com/netmikey/logunit)
+[![Build Status](https://github.com/netmikey/logunit/actions/workflows/build.yaml/badge.svg)](https://github.com/netmikey/logunit/actions)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.netmikey.logunit/logunit-core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.netmikey.logunit/logunit-core)
 
 A Java library for unit-testing logging.
@@ -43,18 +43,18 @@ Add LogUnit to your project's dependencies.
 ```
 dependencies {
     ...
-    testImplementation("io.github.netmikey.logunit:logunit-core:1.1.0")
+    testImplementation("io.github.netmikey.logunit:logunit-core:1.1.3")
 
     // Choose one (and only one) of the following:
 
     // for Logback:
-    // testRuntimeOnly("io.github.netmikey.logunit:logunit-logback:1.1.0")
+    // testRuntimeOnly("io.github.netmikey.logunit:logunit-logback:1.1.3")
 
     // for Log4j2:
-    // testRuntimeOnly("io.github.netmikey.logunit:logunit-log4j2:1.1.0")
+    // testRuntimeOnly("io.github.netmikey.logunit:logunit-log4j2:1.1.3")
 
     // for JUL:
-    // testRuntimeOnly("io.github.netmikey.logunit:logunit-jul:1.1.0")
+    // testRuntimeOnly("io.github.netmikey.logunit:logunit-jul:1.1.3")
 }
 ```
 
