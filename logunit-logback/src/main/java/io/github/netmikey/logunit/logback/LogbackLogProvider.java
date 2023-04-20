@@ -1,5 +1,6 @@
 package io.github.netmikey.logunit.logback;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import java.util.stream.StreamSupport;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
+import org.slf4j.event.KeyValuePair;
 import org.slf4j.event.LoggingEvent;
 
 import ch.qos.logback.classic.Level;
@@ -127,8 +129,8 @@ public class LogbackLogProvider extends BaseLogProvider {
             }
 
             @Override
-            public Marker getMarker() {
-                return iEvent.getMarker();
+            public List<Marker> getMarkers() {
+                return iEvent.getMarkerList();
             }
 
             @Override
@@ -144,6 +146,16 @@ public class LogbackLogProvider extends BaseLogProvider {
             @Override
             public Object[] getArgumentArray() {
                 return iEvent.getArgumentArray();
+            }
+
+            @Override
+            public List<Object> getArguments() {
+                return Arrays.asList(iEvent.getArgumentArray());
+            }
+
+            @Override
+            public List<KeyValuePair> getKeyValuePairs() {
+                return iEvent.getKeyValuePairs();
             }
         };
     }
