@@ -7,9 +7,16 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
+import org.slf4j.event.KeyValuePair;
 import org.slf4j.event.Level;
 
 import io.github.netmikey.logunit.api.LogCapturer;
+import org.slf4j.event.LoggingEvent;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Unit test that uses Logback, applies {@link LogCapturer}s and validates their
@@ -37,7 +44,7 @@ public class LogCapturerWithLogbackTest {
      * above when no level is specified</li>
      * <li>that the namedLogger (by logger name) captures only the WARN level
      * and above as specified</li>
-     * <li>both loggers and their capturers don't affeact each other</li>
+     * <li>both loggers and their capturers don't affect each other</li>
      * </ul>
      */
     @Test
@@ -82,6 +89,38 @@ public class LogCapturerWithLogbackTest {
         testLoggerInfoCapturer.assertContains(e -> Level.ERROR.equals(e.getLevel()), "contain some ERROR message");
         testLoggerInfoCapturer.assertContains(e -> e.getMessage().matches("^Some [^ ]+ message$"),
             "contain 'Some * message'");
+    }
+
+    /**
+     * Test that the values of the new fluent interface can be accessed
+     */
+    @Test
+    void test4FluentApi() {
+        Marker marker1 = MarkerFactory.getMarker("Marker 1");
+        Marker marker2 = MarkerFactory.getMarker("Marker 2");
+        testLogger
+            .atError()
+            .setMessage(() -> "{}-Message {}")
+            .addArgument("Test")
+            .addArgument(42)
+            .addKeyValue("key1", "value1")
+            .addKeyValue("key2", "value2")
+            .addMarker(marker1)
+            .addMarker(marker2)
+            .log();
+
+        List<LoggingEvent> events = testLoggerInfoCapturer.getEvents();
+        Assertions.assertEquals(events.size(), 1);
+
+        LoggingEvent event = events.get(0);
+        Assertions.assertEquals("Test-Message 42", event.getMessage());
+        Assertions.assertEquals(Arrays.asList("Test", 42), event.getArguments());
+        Assertions.assertEquals(Arrays.asList(marker1, marker2), event.getMarkers());
+
+        List<KeyValuePair> pairs = event.getKeyValuePairs();
+        Assertions.assertEquals(2, pairs.size());
+        Assertions.assertEquals("key1=\"value1\"", pairs.get(0).toString());
+        Assertions.assertEquals("key2=\"value2\"", pairs.get(1).toString());
     }
 
     private void logEverythingOnce(Logger logger) {
