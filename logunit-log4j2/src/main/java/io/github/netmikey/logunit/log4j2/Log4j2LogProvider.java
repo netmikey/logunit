@@ -81,7 +81,13 @@ public class Log4j2LogProvider extends BaseLogProvider {
         Configuration cfg = ctx.getConfiguration();
         AppenderRef ref = AppenderRef.createAppenderRef(listAppender.getName(), null, null);
         AppenderRef[] refs = new AppenderRef[] { ref };
-        LoggerConfig loggerConfig = LoggerConfig.createLogger(true, level, loggerName, "true", refs, null, cfg, null);
+        LoggerConfig loggerConfig = LoggerConfig.newBuilder()
+            .withAdditivity(true)
+            .withLevel(level)
+            .withLoggerName(loggerName)
+            .withIncludeLocation("true")
+            .withRefs(refs).withConfig(cfg)
+            .build();
         loggerConfig.addAppender(listAppender, level, null);
         cfg.addLogger(loggerConfig.getName(), loggerConfig);
     }
