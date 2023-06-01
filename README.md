@@ -43,18 +43,18 @@ Add LogUnit to your project's dependencies.
 ```
 dependencies {
     ...
-    testImplementation("io.github.netmikey.logunit:logunit-core:1.1.3")
+    testImplementation("io.github.netmikey.logunit:logunit-core:2.0.0")
 
     // Choose one (and only one) of the following:
 
     // for Logback:
-    // testRuntimeOnly("io.github.netmikey.logunit:logunit-logback:1.1.3")
+    // testRuntimeOnly("io.github.netmikey.logunit:logunit-logback:2.0.0")
 
     // for Log4j2:
-    // testRuntimeOnly("io.github.netmikey.logunit:logunit-log4j2:1.1.3")
+    // testRuntimeOnly("io.github.netmikey.logunit:logunit-log4j2:2.0.0")
 
     // for JUL:
-    // testRuntimeOnly("io.github.netmikey.logunit:logunit-jul:1.1.3")
+    // testRuntimeOnly("io.github.netmikey.logunit:logunit-jul:2.0.0")
 }
 ```
 
