@@ -1,5 +1,8 @@
 package io.github.netmikey.logunit.jul;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.junit.jupiter.api.Assertions;
@@ -10,6 +13,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.slf4j.event.Level;
 
 import io.github.netmikey.logunit.api.LogCapturer;
+import org.slf4j.event.LoggingEvent;
 
 /**
  * Unit test that uses JUL, applies {@link LogCapturer}s and validates their
@@ -77,6 +81,37 @@ public class LogCapturerWithJulTest {
     public void test2CapturerReset() {
         Assertions.assertEquals(0, testLoggerInfoCapturer.size());
         Assertions.assertEquals(0, namedLoggerWarnCapturer.size());
+    }
+
+    @Test
+    void test3EventMethodsWithoutParameters() {
+        namedLogger.warning(() -> "Test-Message");
+
+        List<LoggingEvent> events = namedLoggerWarnCapturer.getEvents();
+        Assertions.assertEquals(events.size(), 1);
+
+        LoggingEvent event = events.get(0);
+        Assertions.assertEquals("Test-Message", event.getMessage());
+        Assertions.assertEquals(Level.WARN, event.getLevel());
+        Assertions.assertSame(Collections.emptyList(), event.getArguments());
+        Assertions.assertSame(Collections.emptyList(), event.getKeyValuePairs());
+        Assertions.assertSame(Collections.emptyList(), event.getMarkers());
+    }
+
+    @Test
+    void test4EventMethodsWithParameters() {
+        namedLogger.log(java.util.logging.Level.SEVERE, "{0}-Message {1}", new Object[]{"Test", 42});
+
+        List<LoggingEvent> events = namedLoggerWarnCapturer.getEvents();
+        Assertions.assertEquals(events.size(), 1);
+
+        LoggingEvent event = events.get(0);
+        Assertions.assertEquals("{0}-Message {1}", event.getMessage(),
+                "returns the raw message (*not* formatted)");
+        Assertions.assertEquals(Level.ERROR, event.getLevel());
+        Assertions.assertEquals(Arrays.asList("Test", 42), event.getArguments());
+        Assertions.assertSame(Collections.emptyList(), event.getKeyValuePairs());
+        Assertions.assertSame(Collections.emptyList(), event.getMarkers());
     }
 
     private void logEverythingOnce(Logger logger) {

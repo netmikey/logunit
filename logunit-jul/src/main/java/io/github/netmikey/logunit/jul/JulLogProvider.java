@@ -1,8 +1,6 @@
 package io.github.netmikey.logunit.jul;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
@@ -11,6 +9,7 @@ import java.util.stream.StreamSupport;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.slf4j.Marker;
+import org.slf4j.event.KeyValuePair;
 import org.slf4j.event.LoggingEvent;
 
 import io.github.netmikey.logunit.api.LogCapturer;
@@ -114,8 +113,27 @@ public class JulLogProvider extends BaseLogProvider {
             }
 
             @Override
+            public List<Object> getArguments() {
+                Object[] parameters = record.getParameters();
+                if (null == parameters) {
+                    return Collections.emptyList();
+                }
+                return Arrays.asList(parameters);
+            }
+
+            @Override
+            public List<KeyValuePair> getKeyValuePairs() {
+                return Collections.emptyList();
+            }
+
+            // for compatibility with older apis
             public Marker getMarker() {
                 return null;
+            }
+
+            @Override
+            public List<Marker> getMarkers() {
+                return Collections.emptyList();
             }
 
             @Override

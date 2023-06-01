@@ -11,10 +11,10 @@ subprojects {
     java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 
     ext {
-        junitVersion   = '5.8.2'  // https://search.maven.org/artifact/org.junit.jupiter/junit-jupiter-api
-        logbackVersion = '1.2.10' // https://search.maven.org/artifact/ch.qos.logback/logback-core
-        log4j2Version  = '2.17.1' // https://search.maven.org/artifact/org.apache.logging.log4j/log4j-core
-        slf4jVersion   = '1.7.32' // https://search.maven.org/artifact/org.slf4j/slf4j-api
+        junitVersion   = '5.9.3'  // https://search.maven.org/artifact/org.junit.jupiter/junit-jupiter-api
+        logbackVersion = '1.3.7'  // https://search.maven.org/artifact/ch.qos.logback/logback-core
+        log4j2Version  = '2.20.0' // https://search.maven.org/artifact/org.apache.logging.log4j/log4j-core
+        slf4jVersion   = '2.0.7'  // https://search.maven.org/artifact/org.slf4j/slf4j-api
     }
 
     repositories {
