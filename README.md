@@ -2,7 +2,7 @@ LogUnit
 =======
 
 [![Build Status](https://github.com/netmikey/logunit/actions/workflows/build.yaml/badge.svg)](https://github.com/netmikey/logunit/actions)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.netmikey.logunit/logunit-core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.netmikey.logunit/logunit-core)
+[![Maven Central](https://maven-badges.sml.io/maven-central/io.github.netmikey.logunit/logunit-core/badge.svg)](https://maven-badges.sml.io/maven-central/io.github.netmikey.logunit/logunit-core)
 
 A Java library for unit-testing logging.
 
